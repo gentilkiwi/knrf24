@@ -25,34 +25,38 @@ endif()
 # ====================================================================================
 set(PICO_BOARD pico CACHE STRING "Board type")
 
+set(PROJECT knrf24)
+
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(knrf24 C CXX ASM)
+project(${PROJECT} C CXX ASM)
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(knrf24 kmain.c knrf24.c)
+add_executable(${PROJECT} kmain.c knrf24.c)
 
-pico_set_program_name(knrf24 "knrf24")
-pico_set_program_version(knrf24 "0.1")
+pico_set_program_name(${PROJECT} ${PROJECT})
+pico_set_program_description(${PROJECT} "knrf24 test on Raspberry Pi Pico")
+pico_set_program_version(${PROJECT} "0.1")
+pico_set_program_url(${PROJECT} "https://github.com/gentilkiwi/knrf24")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(knrf24 false)
-pico_enable_stdio_usb(knrf24 false)
+pico_enable_stdio_uart(${PROJECT} false)
+pico_enable_stdio_usb(${PROJECT} false)
 
 # Add the standard library to the build
-target_link_libraries(knrf24
+target_link_libraries(${PROJECT}
     pico_stdlib
     hardware_spi
 )
 
 # Add the standard include files to the build
-target_include_directories(knrf24 PRIVATE
+target_include_directories(${PROJECT} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
-pico_add_extra_outputs(knrf24)
+pico_add_extra_outputs(${PROJECT})

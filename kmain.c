@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "pico/binary_info.h"
 #include "knrf24.h"
 
 #define SPI_PORT    spi0
@@ -7,22 +8,50 @@
 #define PIN_SCK     2
 #define PIN_MOSI    3
 #define PIN_MISO    4
-
-#define PIN_ULED0   22
-#define PIN_ULED1   21
-#define PIN_ULED2   20
-#define PIN_ULED3   19
-
+// NRF24 device #0
+#define PIN_DEVICE_0_CS     1
+#define PIN_DEVICE_0_CE     0
+#define PIN_DEVICE_0_IRQ    5
+#define PIN_DEVICE_0_LED    6
+// NRF24 device #1
+#define PIN_DEVICE_1_CS     9
+#define PIN_DEVICE_1_CE     8
+#define PIN_DEVICE_1_IRQ    10
+#define PIN_DEVICE_1_LED    7
+// NRF24 device #2
+#define PIN_DEVICE_2_CS     12
+#define PIN_DEVICE_2_CE     11
+#define PIN_DEVICE_2_IRQ    13
+#define PIN_DEVICE_2_LED    14
+// NRF24 device #3
+#define PIN_DEVICE_3_CS     17
+#define PIN_DEVICE_3_CE     18
+#define PIN_DEVICE_3_IRQ    16
+#define PIN_DEVICE_3_LED    15
+// User leds
+#define PIN_ULED_0          22
+#define PIN_ULED_1          21
+#define PIN_ULED_2          20
+#define PIN_ULED_3          19
+// User switch
 #define PIN_SW1     26
 
-const uint USER_LEDS[] = {PIN_ULED0, PIN_ULED1, PIN_ULED2, PIN_ULED3,};
+const uint USER_LEDS[] = {PIN_ULED_0, PIN_ULED_1, PIN_ULED_2, PIN_ULED_3,};
 
 KNRF24_DEVICE KNRF24_DEVICES[] = {
-    {.comm = {.spi = SPI_PORT, .cs =  1 , .ce =  0, .irq =  5}, .led =  6, .isPresent = false},
-    {.comm = {.spi = SPI_PORT, .cs =  9 , .ce =  8, .irq = 10}, .led =  7, .isPresent = false},
-    {.comm = {.spi = SPI_PORT, .cs = 12 , .ce = 11, .irq = 13}, .led = 14, .isPresent = false},
-    {.comm = {.spi = SPI_PORT, .cs = 17 , .ce = 18, .irq = 16}, .led = 15, .isPresent = false},
+    {.comm = {.spi = SPI_PORT, .cs = PIN_DEVICE_0_CS , .ce = PIN_DEVICE_0_CE, .irq = PIN_DEVICE_0_IRQ}, .led = PIN_DEVICE_0_LED, .isPresent = false},
+    {.comm = {.spi = SPI_PORT, .cs = PIN_DEVICE_1_CS , .ce = PIN_DEVICE_1_CE, .irq = PIN_DEVICE_1_IRQ}, .led = PIN_DEVICE_1_LED, .isPresent = false},
+    {.comm = {.spi = SPI_PORT, .cs = PIN_DEVICE_2_CS , .ce = PIN_DEVICE_2_CE, .irq = PIN_DEVICE_2_IRQ}, .led = PIN_DEVICE_2_LED, .isPresent = false},
+    {.comm = {.spi = SPI_PORT, .cs = PIN_DEVICE_3_CS , .ce = PIN_DEVICE_3_CE, .irq = PIN_DEVICE_3_IRQ}, .led = PIN_DEVICE_3_LED, .isPresent = false},
 };
+
+bi_decl(bi_3pins_with_func(PIN_SCK, PIN_MOSI, PIN_MISO, GPIO_FUNC_SPI));
+bi_decl(bi_4pins_with_names(PIN_DEVICE_0_CS, "#0 CS", PIN_DEVICE_0_CE, "#0 CE", PIN_DEVICE_0_IRQ, "#0 IRQ", PIN_DEVICE_0_LED, "#0 LED"));
+bi_decl(bi_4pins_with_names(PIN_DEVICE_1_CS, "#1 CS", PIN_DEVICE_1_CE, "#1 CE", PIN_DEVICE_1_IRQ, "#1 IRQ", PIN_DEVICE_1_LED, "#1 LED"));
+bi_decl(bi_4pins_with_names(PIN_DEVICE_2_CS, "#2 CS", PIN_DEVICE_2_CE, "#2 CE", PIN_DEVICE_2_IRQ, "#2 IRQ", PIN_DEVICE_2_LED, "#2 LED"));
+bi_decl(bi_4pins_with_names(PIN_DEVICE_3_CS, "#3 CS", PIN_DEVICE_3_CE, "#3 CE", PIN_DEVICE_3_IRQ, "#3 IRQ", PIN_DEVICE_3_LED, "#3 LED"));
+bi_decl(bi_4pins_with_names(PIN_ULED_0, "User LED 0", PIN_ULED_1, "User LED 1", PIN_ULED_2, "User LED 2", PIN_ULED_3, "User LED 3"));
+bi_decl(bi_1pin_with_name(PIN_SW1, "User switch"));
 
 const uint8_t NRF_BROADCAST_ADDR[5] = {0xff, 0xff, 0xff, 0xff, 0xff};
 const uint8_t NRF_PAYLOAD[32] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
@@ -55,7 +84,7 @@ void InitNRF(KNRF24_DEVICE *pDevice, uint *sleepAmount)
 
 #define SLEEP_US_BASE  25
 
-static const uint8_t Bluetooth_2[] = {
+static const uint8_t Bluetooth[] = {
     /*0,  */2,  4,  6,  8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80,
     79, 77, 75, 73, 71, 69, 67, 65, 63, 61, 59, 57, 55, 53, 51, 49, 47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 27, 25, 23, 21, 19, 17, 15, 13, 11,  9,  7,  5,  3,/*  1,*/
 };
@@ -95,11 +124,11 @@ int main()
         {
             if(KNRF24_DEVICES[i].isPresent)
             {
-                knrf24_Write_SingleRegister(KNRF24_DEVICES + i, KNRF24_REG_RF_CH, Bluetooth_2[c]);
+                knrf24_Write_SingleRegister(KNRF24_DEVICES + i, KNRF24_REG_RF_CH, Bluetooth[c]);
                 knrf24_DirectCommand(KNRF24_DEVICES + i, KNRF24_INS_REUSE_TX_PL);
                 knrf24_chip_enable(KNRF24_DEVICES + i);
 
-                if (++c == sizeof(Bluetooth_2))
+                if (++c == sizeof(Bluetooth))
                 {
                     c = 0;
                 }
