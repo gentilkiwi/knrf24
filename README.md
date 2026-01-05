@@ -16,7 +16,7 @@ Counterfeits based on `Si24R1` are OK.
 
 ## Firmware
 
-Firmware is built by GitHub Action (see artefacts)
+Firmware is built by GitHub Actions (see Artifacts)
 
 ```
 > picotool info --all knrf24.uf2
