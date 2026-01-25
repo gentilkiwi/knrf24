@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-A little projet I made to drive some `NRF24L01(+)` (up to 4), via SPI.  
-=======
-A little project I made to drive some `NRF24` (up to 4), via SPI.  
->>>>>>> 6da09c41d0347887288b05fd510711f9c893fd04
+A little project I made to drive some `NRF24L01(+)` (up to 4), via SPI.  
 The code is minimalist and is only able to saturate Bluetooth data channels (2402 - 2480 MHz), but can be adapted to whatever your need, code it!  
 It uses a Raspberry Pi Pico as MCU to drive `NRF24L01(+)` module(s).
 
