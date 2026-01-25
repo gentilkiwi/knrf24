@@ -1,16 +1,16 @@
-A little projet I made to drive some `NRF24` (up to 4), via SPI.  
+A little projet I made to drive some `NRF24L01(+)` (up to 4), via SPI.  
 The code is minimalist and is only able to saturate Bluetooth data channels (2402 - 2480 MHz), but can be adapted to whatever your need, code it!  
-It uses a Raspberry Pi Pico as MCU to drive `NRF24` module(s).
+It uses a Raspberry Pi Pico as MCU to drive `NRF24L01(+)` module(s).
 
 
 ## Hardware
 
 I made a board for the lulz: https://oshwlab.com/gentilkiwi/knrf24  
-But you have to add NRF24 modules (1 is ~OK, 2 is OK, 4 is better).
+But you have to add `NRF24L01(+)` modules (1 is ~OK, 2 is OK, 4 is better).
 
 ### NRF24 modules
 
-Ideally, you would like to use official `NRF24` modules, search for: 'NRF24L01+ PA' (LNA not mandatory).  
+Ideally, you would like to use official `NRF24L01(+)` modules, search for: 'NRF24L01+ PA' (LNA not mandatory).  
 Counterfeits based on `Si24R1` are OK.
 
 
@@ -66,7 +66,8 @@ Build Information
 
 ## Hardware references
 
-- `NRF24L01` - https://www.nordicsemi.com/Products/nRF24-series
+- `NRF24L01+` - https://www.nordicsemi.com/Products/nRF24-series
+  - https://docs.nordicsemi.com/bundle/nRF24L01P_PS_v1.0/resource/nRF24L01P_PS_v1.0.pdf ( PDF: https://docs-be.nordicsemi.com/bundle/nRF24L01P_PS_v1.0/raw/resource/enus/nRF24L01P_PS_v1.0.pdf )
 - `Si24R1` - http://www.csm-ic.com/html/ProductView.asp?ID=249
 
 
