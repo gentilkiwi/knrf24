@@ -88,6 +88,16 @@ static const uint8_t Bluetooth[] = {
     /*0,  */2,  4,  6,  8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80,
     79, 77, 75, 73, 71, 69, 67, 65, 63, 61, 59, 57, 55, 53, 51, 49, 47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 27, 25, 23, 21, 19, 17, 15, 13, 11,  9,  7,  5,  3,/*  1,*/
 };
+static const uint8_t Unifying[] = {/*0, */5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74}; // 0 can be here to keep internal Unifying indexes
+
+volatile bool g_irq_SW1;
+void __isr __time_critical_func(IRQ_Callback)(uint gpio, uint32_t event_mask)
+{
+    if((gpio == PIN_SW1) && (event_mask & GPIO_IRQ_EDGE_FALL))
+    {
+        g_irq_SW1 = true;
+    }
+}
 
 int main()
 {
@@ -97,7 +107,10 @@ int main()
 
     gpio_init(PIN_SW1);
     gpio_pull_up(PIN_SW1);
-    gpio_set_irq_enabled(PIN_SW1, GPIO_IRQ_EDGE_FALL, true);
+
+    //gpio_set_irq_enabled(PIN_SW1, GPIO_IRQ_EDGE_FALL, true);
+    //gpio_set_irq_callback(IRQ_Callback);
+    //irq_set_enabled(IO_IRQ_BANK0, true);
 
     for(i = 0; i < count_of(USER_LEDS); i++)
     {

@@ -25,38 +25,38 @@ endif()
 # ====================================================================================
 set(PICO_BOARD pico CACHE STRING "Board type")
 
-set(PROJECT knrf24)
+set(PROJECT_NAME knrf24)
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
 
-project(${PROJECT} C CXX ASM)
+project(knrf24 C CXX ASM) # not using the var for flash system to be able to use the elf filename
 
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(${PROJECT} kmain.c knrf24.c)
+add_executable(${PROJECT_NAME} kmain.c knrf24.c)
 
-pico_set_program_name(${PROJECT} ${PROJECT})
-pico_set_program_description(${PROJECT} "knrf24 test on Raspberry Pi Pico")
-pico_set_program_version(${PROJECT} "0.1")
-pico_set_program_url(${PROJECT} "https://github.com/gentilkiwi/knrf24")
+pico_set_program_name(${PROJECT_NAME} ${PROJECT_NAME})
+pico_set_program_description(${PROJECT_NAME} "knrf24 test on Raspberry Pi Pico")
+pico_set_program_version(${PROJECT_NAME} "0.1")
+pico_set_program_url(${PROJECT_NAME} "https://github.com/gentilkiwi/knrf24")
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(${PROJECT} false)
-pico_enable_stdio_usb(${PROJECT} false)
+pico_enable_stdio_uart(${PROJECT_NAME} false)
+pico_enable_stdio_usb(${PROJECT_NAME} false)
 
 # Add the standard library to the build
-target_link_libraries(${PROJECT}
+target_link_libraries(${PROJECT_NAME}
     pico_stdlib
     hardware_spi
 )
 
 # Add the standard include files to the build
-target_include_directories(${PROJECT} PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
-pico_add_extra_outputs(${PROJECT})
+pico_add_extra_outputs(${PROJECT_NAME})
