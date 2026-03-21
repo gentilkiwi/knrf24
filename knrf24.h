@@ -55,9 +55,13 @@
 #define KNRF24_REG_SETUP_RETR_ARD_shift     (4)
 #define KNRF24_REG_SETUP_RETR_ARC_shift     (0)
 
+
+#define KNRF24_REG_RF_SETUP_CONT_WAVE       (1 << 6)
+#define KNRF24_REG_RF_SETUP_RF_DR_LOW       (1 << 5)
 #define KNRF24_REG_RF_SETUP_PLL_LOCK        (1 << 4)
 #define KNRF24_REG_RF_SETUP_RF_DR_1Mbps     (0 << 3)
 #define KNRF24_REG_RF_SETUP_RF_DR_2Mbps     (1 << 3)
+#define KNRF24_REG_RF_SETUP_RF_DR_HIGH      (1 << 3)
 #define KNRF24_REG_RF_SETUP_RF_PWR_18dbm    (0b00 << 1)
 #define KNRF24_REG_RF_SETUP_RF_PWR_12dbm    (0b01 << 1)
 #define KNRF24_REG_RF_SETUP_RF_PWR_6dbm     (0b10 << 1)

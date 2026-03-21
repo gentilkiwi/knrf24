@@ -89,6 +89,7 @@ static const uint8_t Bluetooth[] = {
     79, 77, 75, 73, 71, 69, 67, 65, 63, 61, 59, 57, 55, 53, 51, 49, 47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 27, 25, 23, 21, 19, 17, 15, 13, 11,  9,  7,  5,  3,/*  1,*/
 };
 static const uint8_t Unifying[] = {/*0, */5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74}; // 0 can be here to keep internal Unifying indexes
+static const uint8_t Unifying_short[] = {5, 8, 14, 17, 32, 35, 41, 44, 62, 65, 71, 74}; // {5, 32, 62, 8, 35, 65, 14, 41, 71, 17, 44, 74};
 
 volatile bool g_irq_SW1;
 void __isr __time_critical_func(IRQ_Callback)(uint gpio, uint32_t event_mask)
@@ -140,14 +141,14 @@ int main()
                 knrf24_Write_SingleRegister(KNRF24_DEVICES + i, KNRF24_REG_RF_CH, Bluetooth[c]);
                 knrf24_DirectCommand(KNRF24_DEVICES + i, KNRF24_INS_REUSE_TX_PL);
                 knrf24_chip_enable(KNRF24_DEVICES + i);
-
+                
                 if (++c == sizeof(Bluetooth))
                 {
                     c = 0;
                 }
             }
         }
-        
+
         busy_wait_us_32(s);
 
         for(i = 0; i < count_of(KNRF24_DEVICES); i++)
